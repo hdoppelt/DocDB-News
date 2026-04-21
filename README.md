@@ -4,7 +4,7 @@
 
 Install Dependendies:
 ```bash
-pip install -r requirements.txt
+py -m pip install -r requirements.txt
 ```
 
 ## Running the Application
