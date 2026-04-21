@@ -221,23 +221,31 @@ if uploaded_file is not None:
         )
 
         if display_columns:
-            max_display = min(50, len(filtered_df))
-            default_display = min(10, max_display)
+            row_count = len(filtered_df)
 
-            display_count = st.slider(
-                "Number of rows to display",
-                min_value=5,
-                max_value=max_display,
-                value=default_display,
-                step=5
-            )
+            if row_count == 0:
+                st.info("No rows to display for the current filters.")
+            else:
+                max_display = min(50, row_count)
 
-            st.caption(f"Showing top {display_count} of {len(filtered_df)} rows")
+                if row_count <= 5:
+                    display_count = row_count
+                else:
+                    default_display = min(10, max_display)
+                    display_count = st.slider(
+                        "Number of rows to display",
+                        min_value=5,
+                        max_value=max_display,
+                        value=default_display,
+                        step=5
+                    )
 
-            st.dataframe(
-                filtered_df[display_columns].head(display_count),
-                use_container_width=True,
-            )
+                st.caption(f"Showing top {display_count} of {row_count} rows")
+
+                st.dataframe(
+                    filtered_df[display_columns].head(display_count),
+                    use_container_width=True,
+                )
         else:
             st.info("Select at least one column to display.")
 
@@ -293,19 +301,23 @@ if uploaded_file is not None:
             )
 
             if not results_df.empty:
-                max_display = min(50, len(results_df))
-                default_display = min(10, max_display)
+                result_count = len(results_df)
+                max_display = min(50, result_count)
 
-                display_count = st.slider(
-                    "Number of search results to show",
-                    min_value=5,
-                    max_value=max_display,
-                    value=default_display,
-                    step=5
-                )
+                if result_count <= 5:
+                    display_count = result_count
+                else:
+                    default_display = min(10, max_display)
+                    display_count = st.slider(
+                        "Number of search results to show",
+                        min_value=5,
+                        max_value=max_display,
+                        value=default_display,
+                        step=5
+                    )
 
                 st.write(
-                    f"Found {len(results_df)} matching documents. Showing top {display_count}."
+                    f"Found {result_count} matching documents. Showing top {display_count}."
                 )
 
                 st.dataframe(
